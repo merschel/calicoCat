@@ -37,38 +37,55 @@ preference.viewer.sepValue.show{1} = {0};
 preference.viewer.sepValue.show{2} = {0;0};
 %preference.viewer.sepValue.show{3} = {0};
 
-
-
 preference.viewer.sepPara.show{1} = {1 1 1;1 0 1};
 %preference.viewer.sepPara.show{2} = {1};
 %preference.viewer.sepPara.show{3} = {0};
 
 %preference.logger.stream.info = 'output.info';
 
-
-
-
 output = monte(preference);
 
 % TODO: 
-%  - eigenwert analyse
-%  - CLim befehl
-%  - gui
-%  - test BODE, DDE, DAE, ... was matlab hergibt
-%  - 3d seperation
-%  - speicher von zwischenergebnissen um datenverlust bei abstï¿½rzen vorzubeugen+
-%  speichern allgemine 
-%  - eigene Colormap welche konstant in abhï¿½ngigkeit der anzahl der
-%  lï¿½sungen ist
-%  - option des sichtbereiches der Lï¿½sung (dicht) eifï¿½gen
+
+% Version 0.5
 %  - Varablen umbenennen
-%  - give the hole project a better name: how about LyX, CalicoCat
-%  - Seperartion absolut und in relativ
-%  - wenn dichte oder solution nicht berechet werden, muss das prgramm
-%  reagieren
+%  - ploten von zustandsgrößen gegeneinander
+%  - legende
+%  - konfidenzintervalle x über t
+%  - option des sichtbereiches der Lï¿½sung (dicht) eifï¿½gen
+%  - Komentare und funktionsbeschreibung  
+%  - anleitung schreiben 
+
+% Version 0.6
+%  - 3d seperation
 %  - test ob inic seperation die intervalle keinen luecken haben, ggf auch
 %  fuer die anderen seperation ueberpruefen
-%  - Komentare und funktionsbeschreibung  
+%  - speicher von zwischenergebnissen um datenverlust bei abstï¿½rzen vorzubeugen+
+%  - speichern allgemine 
+%  - option was gespeichert werden soll
+%  - wenn dichte oder solution nicht berechet werden, muss das prgramm
+%  reagieren
+%  - eigenwert analyse
+%  - phasenraum dichte
+
+% Version 0.7
+%  - eigene Colormap welche konstant in abhï¿½ngigkeit der anzahl der
+%  lï¿½sungen ist 
+% http://cresspahl.blogspot.de/2012/03/expanded-control-of-octaves-colormap.html
+% - eigenwerte konfidenzintervalle
+% - eigenwerte dichte
 
 
+% Version 1.0
+%  - give the hole project a better name: how about LyX, CalicoCat
+%  - cluster den Zeitverlauf um unterschiedliche parameter konstelation als
+%  gleichwertig zu betrachten 
+%  - Abstandsmass für die sesibilität von einen Parameter
 
+% Version > 1.0
+%  - gui
+%  - test BODE, DDE, DAE, ... was matlab hergibt
+
+% ???
+%  - Seperartion absolut und in relativ
+%  - CLim befehl
