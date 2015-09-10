@@ -1,10 +1,10 @@
 clear;
-
+%profile on
 %% ode
 preference.ode.solver = @ode45;
 preference.ode.f = @f;
 
-preference.numberOfSimulations = 200; %wenn 1 ist die density nicht richtig
+preference.numberOfSimulations = 2000; %wenn 1 ist die density nicht richtig
 preference.simulationTime = [0 30];
 preference.deltaT = .01;
 preference.deltaX = .01;
@@ -13,7 +13,7 @@ preference.parallel = 1;
 
 preference.inic.interval = {{-2 2}};             % {{* *}} or {{* *};{* *};...}
 %preference.inic.interval = {{1 2 3};{4 3 2}};
-preference.inic.distribution = {'integer'}; % 'normally', 'uniformly', 'integer' or 'list'
+preference.inic.distribution = {'uniformly'}; % 'normally', 'uniformly', 'integer' or 'list'
 
 preference.para.interval = {{0 2}};              % {{* *}} or {{* *};{* *};...}
 preference.para.distribution = {'uniformly'}; % 'normally', 'uniformly' or 'integer' or 'list'
@@ -29,12 +29,11 @@ preference.seperation.value.interval{2} = {{-2 0; 0 0.5;0.5 2};{0 0.2; 0.2 1}}; 
 preference.seperation.para.interval{1} = {{0 0.5; 0.5 1}};     % Zweite Seperation fÃ¼r alle 3 Parameter gleich 
 %preference.seperation.para.interval{2} = {{0 0.3; 0.3 0.5; 0.5 1}};  % dritte Seperation fÃ¼r alle Parameter gleich 
 
-
-preference.viewer.density.show = {0};
+preference.viewer.density.show = {1};
 preference.viewer.density3d.show = {0};
 
-preference.viewer.sepValue.show{1} = {0};
-preference.viewer.sepValue.show{2} = {0;0};
+preference.viewer.sepValue.show{1} = {1};
+preference.viewer.sepValue.show{2} = {1;1};
 %preference.viewer.sepValue.show{3} = {0};
 
 preference.viewer.sepPara.show{1} = {1 1 1;1 0 1};
@@ -44,14 +43,16 @@ preference.viewer.sepPara.show{1} = {1 1 1;1 0 1};
 %preference.logger.stream.info = 'output.info';
 
 output = monte(preference);
+%profile off
+%profile viewer
+
 
 % TODO: 
 
 % Version 0.5
 %  - Varablen umbenennen
-%  - ploten von zustandsgrößen gegeneinander
-%  - legende
-%  - konfidenzintervalle x über t
+%  - ploten von zustandsgrï¿½ï¿½en gegeneinander
+%  - konfidenzintervalle x ï¿½ber t
 %  - option des sichtbereiches der Lï¿½sung (dicht) eifï¿½gen
 %  - Komentare und funktionsbeschreibung  
 %  - anleitung schreiben 
@@ -74,13 +75,14 @@ output = monte(preference);
 % http://cresspahl.blogspot.de/2012/03/expanded-control-of-octaves-colormap.html
 % - eigenwerte konfidenzintervalle
 % - eigenwerte dichte
+% - logger bei einfachen zahlen mit 0 auffÃ¼hlen 
 
 
 % Version 1.0
 %  - give the hole project a better name: how about LyX, CalicoCat
 %  - cluster den Zeitverlauf um unterschiedliche parameter konstelation als
 %  gleichwertig zu betrachten 
-%  - Abstandsmass für die sesibilität von einen Parameter
+%  - Abstandsmass fï¿½r die sesibilitï¿½t von einen Parameter
 
 % Version > 1.0
 %  - gui

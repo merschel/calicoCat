@@ -100,15 +100,27 @@ for k = 1:length(preference.seperation.para.interval)
             if preference.viewer.sepPara.show{k}{i,j}
                 logger('info',['Plot equation number ',num2str(i),'; Parameter number ',num2str(j)],preference)
                 CM = colormapCreator(preference.viewer.sepPara.color{k}{i,j},size(preference.seperation.para.interval{k}{j},1));
+                legName = cell(size(preference.seperation.para.interval{k}{j},1),1);
+                legPlot = zeros(size(preference.seperation.para.interval{k}{j},1),1);
+                legCount = 1;
                 figure
                 hold on
                 for l = 1:preference.numberOfSimulations
                     colorNumber = findIntervall(cell2mat(preference.seperation.para.interval{k}{j}),sol.rPara(j,l));
-                    plot(sol.deval.t,sol.deval.x{l}(i,:),'color',CM(colorNumber,:))
+                    ph = plot(sol.deval.t,sol.deval.x{l}(i,:),'color',CM(colorNumber,:));
+                    
+                    % the following if-statment is for the legend
+                    if colorNumber == legCount
+                        legName{legCount} = [num2str(preference.seperation.para.interval{k}{j}{legCount,1}),...
+                            ' - ',num2str(preference.seperation.para.interval{k}{j}{legCount,2})];
+                        legPlot(legCount) = ph;
+                        legCount = legCount + 1;
+                    end
                 end
                 xlabel(preference.viewer.sepPara.xlabel{k}{i,j})
                 ylabel(preference.viewer.sepPara.ylabel{k}{i,j})
                 title(preference.viewer.sepPara.title{k}{i,j})
+                legend(legPlot,legName)
             end
         end
     end
@@ -123,16 +135,29 @@ for k = 1:length(preference.seperation.value.interval)
         if preference.viewer.sepValue.show{k}{i}
             logger('info',['Plot equation number ',num2str(i)],preference)
             CM = colormapCreator(preference.viewer.sepValue.color{k}{i},size(preference.seperation.value.interval{k}{i},1));
+            legName = cell(size(preference.seperation.value.interval{k}{i},1),1);
+            legPlot = zeros(size(preference.seperation.value.interval{k}{i},1),1);
+            legCount = 1;
             figure
             hold on
             for j = 1:preference.numberOfSimulations
                 sepValue=deval(sol.solver{j},preference.seperation.value.time{k}{i},i);
                 colorNumber = findIntervall(cell2mat(preference.seperation.value.interval{k}{i}),sepValue);
-                plot(sol.deval.t,sol.deval.x{j}(i,:),'color',CM(colorNumber,:))
+                ph = plot(sol.deval.t,sol.deval.x{j}(i,:),'color',CM(colorNumber,:));
+                
+                % the following if-statment is for the legend
+                if colorNumber == legCount
+                    legName{legCount} = [num2str(preference.seperation.value.interval{k}{i}{legCount,1}),...
+                        ' - ',num2str(preference.seperation.value.interval{k}{i}{legCount,2})];
+                    legPlot(legCount) = ph;
+                    legCount = legCount + 1;
+                end
+                
             end
             xlabel(preference.viewer.sepValue.xlabel{k}{i})
             ylabel(preference.viewer.sepValue.ylabel{k}{i})
             title(preference.viewer.sepValue.title{k}{i})
+            legend(legPlot,legName)
         end
     end
 end

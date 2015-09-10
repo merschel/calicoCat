@@ -570,7 +570,7 @@ else
     for k = 1:n
         h = cell(numberOfEquations,1);
         for i = 1:numberOfEquations
-            h{i} = @jet;  %<-- default
+            h{i} = @lines;  %<-- default
         end
         preference.viewer.sepValue.color{k} = h;
     end
@@ -714,7 +714,7 @@ else
         h = cell(numberOfEquations,numberOfParameter);
         for i = 1:numberOfEquations
             for j = 1:numberOfParameter
-                h{i,j} = @jet;  %<-- default
+                h{i,j} = @lines;  %<-- default
             end
         end
         preference.viewer.sepPara.color{k} = h;
