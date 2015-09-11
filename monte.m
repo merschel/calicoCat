@@ -85,10 +85,13 @@ solDeval.t = linspace(preference.simulationTime(1),preference.simulationTime(2),
 
 solSolver = cell(preference.numberOfSimulations,1);
 x = cell(preference.numberOfSimulations,1);
-
+X = cell(preference.ode.numberOfEquations,1);
 if preference.parallel
     parfor i = 1:preference.numberOfSimulations
         [solSolver{i}, x{i}] = solve(i,sol,solDeval,preference);
+        for j = 1:preference.ode.numberOfEquations
+            X{j} = x{i}
+        end
     end
 else
     solDeval.x = cell(preference.numberOfSimulations,1);
@@ -96,6 +99,9 @@ else
         [solSolver{i}, x{i}] = solve(i,sol,solDeval,preference);
     end
 end
+
+
+
 solDeval.x = x;
 
 sol.solver = solSolver;
@@ -122,10 +128,10 @@ for k = 1:preference.ode.numberOfEquations
     for i = 1:preference.numberOfSimulations
         hmin = min(sol.deval.x{i}(k,:));
         hmax = max(sol.deval.x{i}(k,:));
-        if hmin<minX{k}
+        if hmin < minX{k}
             minX{k} = hmin;
         end
-        if hmax>maxX{k}
+        if hmax > maxX{k}
             maxX{k} = hmax;
         end
     end

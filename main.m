@@ -4,7 +4,7 @@ clear;
 preference.ode.solver = @ode45;
 preference.ode.f = @f;
 
-preference.numberOfSimulations = 2000; %wenn 1 ist die density nicht richtig
+preference.numberOfSimulations = 5; %wenn 1 ist die density nicht richtig
 preference.simulationTime = [0 30];
 preference.deltaT = .01;
 preference.deltaX = .01;
