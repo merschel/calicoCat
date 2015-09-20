@@ -651,6 +651,36 @@ else
     end
 end
 
+logger('info','Set viewer.sepValue.legend',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'sepValue') && isfield(newPreference.viewer.sepValue,'legend')
+    n = length(newPreference.viewer.sepValue.legend);
+    for k = 1:n
+        if numberOfEquations > 1 && length(newPreference.viewer.sepValue.legend{k}) == 1
+            h = cell(numberOfEquations,1);
+            for i = 1:numberOfEquations
+                h{i} = newPreference.viewer.sepValue.legend{k}{1};
+            end
+            preference.viewer.sepValue.legend{k} = h;
+        else
+            preference.viewer.sepValue.legend{k} = newPreference.viewer.sepValue.legend{k};
+        end
+    end
+else
+    n = length(preference.seperation.value.interval);
+    for k = 1:n
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h1 = cell(size(preference.seperation.value.interval{k}{i},1),1);
+            for j = 1:size(preference.seperation.value.interval{k}{i},1)
+                h1{j} = [num2str(preference.seperation.value.interval{k}{i}{j,1}),' - ',...
+                    num2str(preference.seperation.value.interval{k}{i}{j,2})];  %<-- default
+            end
+            h{i} = h1;
+        end
+        preference.viewer.sepValue.legend{k} = h;
+    end
+end
+
 logger('info','Set viewer.sepPara.show',preference)
 if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'sepPara') && isfield(newPreference.viewer.sepPara,'show')
     n = length(newPreference.viewer.sepPara.show);
@@ -824,6 +854,186 @@ else
         end
         preference.viewer.sepPara.title{k} = h;
     end
+end
+
+logger('info','Set viewer.sepPara.legend',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'sepPara') && isfield(newPreference.viewer.sepPara,'legend')
+    n = length(newPreference.viewer.sepPara.legend);
+    for k = 1:n
+        if numberOfEquations > 1 && length(newPreference.viewer.sepPara.legend{k}) == 1
+            h = cell(numberOfEquations,numberOfParameter);
+            for i = 1:numberOfEquations
+                for j = 1:numberOfParameter
+                    h{i} = newPreference.viewer.sepPara.legend{k}{1};
+                end
+            end
+            preference.viewer.sepPara.legend{k} = h;
+        else
+            h = cell(numberOfEquations,numberOfParameter);
+            for i = 1:numberOfEquations
+                for j = 1:numberOfParameter
+                    h{i,j} = newPreference.viewer.sepPara.legend{k}{i,j};
+                end
+            end
+            preference.viewer.sepPara.legend{k} = h;
+        end
+    end
+else
+    n = length(preference.seperation.para.interval);
+    for k = 1:n
+        h = cell(numberOfEquations,numberOfParameter);
+        for i = 1:numberOfEquations
+            for j = 1:numberOfParameter
+                h1 = cell(size(preference.seperation.para.interval{k}{j},1),1);
+                for l = 1:size(preference.seperation.para.interval{k}{j},1)
+                    h1{l} =  [num2str(preference.seperation.para.interval{k}{j}{l,1}),' - ',...
+                        num2str(preference.seperation.para.interval{k}{j}{l,2})]; %<-- default
+                end
+                h{i,j} = h1;
+            end
+        end
+        preference.viewer.sepPara.legend{k} = h;
+    end
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+logger('info','Set viewer.confidence.show',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'show')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.show) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.show{1};
+        end
+        preference.viewer.confidence.show = h;
+    else
+        preference.viewer.confidence.show = newPreference.viewer.confidence.show;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i = 1:numberOfEquations
+        h{i} = 1; %<-- default
+    end
+    preference.viewer.confidence.show = h;
+end
+
+logger('info','Set viewer.confidence.intervals',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'intervals')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.intervals) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.intervals{1};
+        end
+        preference.viewer.confidence.intervals = h;
+    else
+        preference.viewer.confidence.intervals = newPreference.viewer.confidence.intervals;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i = 1:numberOfEquations
+        h{i} = [0.25 0.5 0.75]; %<-- default
+    end
+    preference.viewer.confidence.intervals = h;
+end
+
+logger('info','Set viewer.confidence.color',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'color')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.color) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.color{1};
+        end
+        preference.viewer.confidence.color = h;
+    else
+        preference.viewer.confidence.color = newPreference.viewer.confidence.color;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i = 1:numberOfEquations
+        h{i} = @jet; %<-- default
+    end
+    preference.viewer.confidence.color = h;
+end
+
+logger('info','Set viewer.confidence.xlabel',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'xlabel')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.xlabel) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.xlabel{1};
+        end
+        preference.viewer.confidence.xlabel = h;
+    else
+        preference.viewer.confidence.xlabel = newPreference.viewer.confidence.xlabel;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i=1:numberOfEquations
+        h{i} = 't'; %<-- default
+    end
+    preference.viewer.confidence.xlabel = h;
+end
+
+logger('info','Set viewer.confidence.ylabel',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'ylabel')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.ylabel) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.ylabel{1};
+        end
+        preference.viewer.confidence.ylabel = h;
+    else
+        preference.viewer.confidence.ylabel = newPreference.viewer.confidence.ylabel;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i=1:numberOfEquations
+        h{i} = 'x'; %<-- default
+    end
+    preference.viewer.confidence.ylabel = h;
+end
+
+logger('info','Set viewer.confidence.title',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'title')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.title) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.title{1};
+        end
+        preference.viewer.confidence.title = h;
+    else
+        preference.viewer.confidence.title = newPreference.viewer.confidence.title;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i=1:numberOfEquations
+        h{i} = sprintf('Confidence intervall for equation %d',i); %<-- default
+    end
+    preference.viewer.confidence.title = h;
+end
+
+logger('info','Set viewer.confidence.legend',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'confidence') && isfield(newPreference.viewer.confidence,'legend')
+    if numberOfEquations > 1 && length(newPreference.viewer.confidence.legend) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.confidence.legend{1};
+        end
+        preference.viewer.confidence.legend = h;
+    else
+        preference.viewer.confidence.legend = newPreference.viewer.confidence.legend;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i = 1:numberOfEquations
+        h1 = cell(length(preference.viewer.confidence.intervals{i}),1);
+        intervals = sort(preference.viewer.confidence.intervals{i},'descend');
+        for j = 1:length(intervals)
+            h1{j} = sprintf('%3.1f %%',100*intervals(j)); %<-- default
+        end
+        h{i} = h1;
+    end
+    preference.viewer.confidence.legend = h;
 end
 
 end

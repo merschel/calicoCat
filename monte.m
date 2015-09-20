@@ -25,6 +25,7 @@ monteViewer(sol,den,preference,'showDensity3d')
 monteViewer(sol,den,preference,'showDensity')
 monteViewer(sol,[],preference,'showSeperationValue')
 monteViewer(sol,[],preference,'showSeperationPara')
+monteViewer(sol,[],preference,'showConfidenceInterval')
 
 output.sol = sol;
 output.den = den;
@@ -89,9 +90,6 @@ X = cell(preference.ode.numberOfEquations,1);
 if preference.parallel
     parfor i = 1:preference.numberOfSimulations
         [solSolver{i}, x{i}] = solve(i,sol,solDeval,preference);
-        for j = 1:preference.ode.numberOfEquations
-            X{j} = x{i}
-        end
     end
 else
     solDeval.x = cell(preference.numberOfSimulations,1);
@@ -100,9 +98,13 @@ else
     end
 end
 
+x = cell2mat(x);
 
+for j = 1:preference.ode.numberOfEquations
+    X{j} = x(j:preference.ode.numberOfEquations:end,:);
+end
 
-solDeval.x = x;
+solDeval.x = X;
 
 sol.solver = solSolver;
 sol.deval = solDeval;
@@ -123,18 +125,8 @@ minX = cell(preference.ode.numberOfEquations,1);
 maxX = cell(preference.ode.numberOfEquations,1);
 
 for k = 1:preference.ode.numberOfEquations
-    minX{k} = min(sol.deval.x{1}(k,:));
-    maxX{k} = max(sol.deval.x{1}(k,:));
-    for i = 1:preference.numberOfSimulations
-        hmin = min(sol.deval.x{i}(k,:));
-        hmax = max(sol.deval.x{i}(k,:));
-        if hmin < minX{k}
-            minX{k} = hmin;
-        end
-        if hmax > maxX{k}
-            maxX{k} = hmax;
-        end
-    end
+    minX{k} = min(min(sol.deval.x{k}));
+    maxX{k} = max(max(sol.deval.x{k}));
 end
 
 density = cell(preference.ode.numberOfEquations,1);
@@ -144,12 +136,8 @@ for k = 1:preference.ode.numberOfEquations
     logger('info',['Determine density for eqation number ',num2str(k)],preference)
     numberAreaPoints = round((maxX{k}-minX{k})/preference.deltaX)+1;
     spacedX{k} = linspace(minX{k},maxX{k},numberAreaPoints);
-    H = zeros(preference.numberOfSimulations,length(sol.deval.t));
-    for i = 1:preference.numberOfSimulations
-        H(i,:) = sol.deval.x{i}(k,:);
-    end
     try
-        density{k} = hist(H,spacedX{k});  %TODO: sometimes memory problems: fix this!!!!
+        density{k} = hist(sol.deval.x{k},spacedX{k});  %TODO: sometimes memory problems: fix this!!!!
     catch exeption
         fprintf('Equation %d cause an error\n',k)
         fprintf(exeption)

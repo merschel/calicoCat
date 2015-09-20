@@ -35,6 +35,13 @@ switch mode
             logger('error',['Something goes wrong in showSeperationPara: ',...
                 e.identifier, ' -> ', e.message],preference)
         end
+    case 'showConfidenceInterval'
+        try 
+            showConfidenceInterval(sol,preference)
+        catch e
+            logger('error',['Something goes wrong in showConfidenceInterval: ',...
+                e.identifier, ' -> ', e.message],preference)
+        end
     otherwise
         error(['viewer: ', mode,' not known']);
 end
@@ -100,27 +107,16 @@ for k = 1:length(preference.seperation.para.interval)
             if preference.viewer.sepPara.show{k}{i,j}
                 logger('info',['Plot equation number ',num2str(i),'; Parameter number ',num2str(j)],preference)
                 CM = colormapCreator(preference.viewer.sepPara.color{k}{i,j},size(preference.seperation.para.interval{k}{j},1));
-                legName = cell(size(preference.seperation.para.interval{k}{j},1),1);
-                legPlot = zeros(size(preference.seperation.para.interval{k}{j},1),1);
-                legCount = 1;
                 figure
                 hold on
                 for l = 1:preference.numberOfSimulations
                     colorNumber = findIntervall(cell2mat(preference.seperation.para.interval{k}{j}),sol.rPara(j,l));
-                    ph = plot(sol.deval.t,sol.deval.x{l}(i,:),'color',CM(colorNumber,:));
-                    
-                    % the following if-statment is for the legend
-                    if colorNumber == legCount
-                        legName{legCount} = [num2str(preference.seperation.para.interval{k}{j}{legCount,1}),...
-                            ' - ',num2str(preference.seperation.para.interval{k}{j}{legCount,2})];
-                        legPlot(legCount) = ph;
-                        legCount = legCount + 1;
-                    end
+                    plot(sol.deval.t,sol.deval.x{i}(l,:),'color',CM(colorNumber,:));                    
                 end
                 xlabel(preference.viewer.sepPara.xlabel{k}{i,j})
                 ylabel(preference.viewer.sepPara.ylabel{k}{i,j})
                 title(preference.viewer.sepPara.title{k}{i,j})
-                legend(legPlot,legName)
+                esayLegend(preference.viewer.sepPara.legend{k}{i,j},CM)
             end
         end
     end
@@ -135,31 +131,47 @@ for k = 1:length(preference.seperation.value.interval)
         if preference.viewer.sepValue.show{k}{i}
             logger('info',['Plot equation number ',num2str(i)],preference)
             CM = colormapCreator(preference.viewer.sepValue.color{k}{i},size(preference.seperation.value.interval{k}{i},1));
-            legName = cell(size(preference.seperation.value.interval{k}{i},1),1);
-            legPlot = zeros(size(preference.seperation.value.interval{k}{i},1),1);
-            legCount = 1;
             figure
             hold on
             for j = 1:preference.numberOfSimulations
                 sepValue=deval(sol.solver{j},preference.seperation.value.time{k}{i},i);
                 colorNumber = findIntervall(cell2mat(preference.seperation.value.interval{k}{i}),sepValue);
-                ph = plot(sol.deval.t,sol.deval.x{j}(i,:),'color',CM(colorNumber,:));
-                
-                % the following if-statment is for the legend
-                if colorNumber == legCount
-                    legName{legCount} = [num2str(preference.seperation.value.interval{k}{i}{legCount,1}),...
-                        ' - ',num2str(preference.seperation.value.interval{k}{i}{legCount,2})];
-                    legPlot(legCount) = ph;
-                    legCount = legCount + 1;
-                end
-                
+                plot(sol.deval.t,sol.deval.x{i}(j,:),'color',CM(colorNumber,:));               
             end
             xlabel(preference.viewer.sepValue.xlabel{k}{i})
             ylabel(preference.viewer.sepValue.ylabel{k}{i})
             title(preference.viewer.sepValue.title{k}{i})
-            legend(legPlot,legName)
+            esayLegend(preference.viewer.sepValue.legend{k}{i},CM)
         end
     end
 end
 logger('info','done showSeperationValue',preference)
+end
+
+function showConfidenceInterval(sol,preference)
+logger('info','showConfidenceInterval',preference)
+for i = 1:preference.ode.numberOfEquations
+    if preference.viewer.confidence.show{i}
+        logger('info',['Plot equation number ',num2str(i)],preference)
+        CM = colormapCreator(preference.viewer.confidence.color{i},length(preference.viewer.confidence.intervals{i}));
+        figure
+        hold on
+        sortX = sort(sol.deval.x{i});
+        intervals = sort(preference.viewer.confidence.intervals{i},'descend');
+        for j = 1:length(intervals)
+            idx1 = floor((1-intervals(j))*preference.numberOfSimulations/2);
+            idx2 = preference.numberOfSimulations - idx1;
+            if idx1 == 0
+                idx1 = 1;
+            end
+            T = [sol.deval.t, fliplr(sol.deval.t)];
+            X = [sortX(idx1,:), fliplr(sortX(idx2,:))];
+            fill(T,X,CM(j,:));
+        end
+         xlabel(preference.viewer.confidence.xlabel{i})
+         ylabel(preference.viewer.confidence.ylabel{i})
+         title(preference.viewer.confidence.title{i})
+         legend(preference.viewer.confidence.legend{i})
+    end
+end
 end
