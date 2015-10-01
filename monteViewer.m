@@ -49,21 +49,38 @@ end
 end
 
 % Show an 3d figure of the density.
-% Calculate all nessesary parameter
 function showDensity3d(sol,den,preference)
 logger('info','showDensity3d',preference)
 for i = 1:preference.ode.numberOfEquations
     if preference.viewer.density3d.show{i}
         logger('info',['Plot equation number ',num2str(i)],preference)
+        
+        if isempty(preference.viewer.density3d.zoom{i})
+            T = sol.deval.t;
+            X = den.spacedX{i};
+            D = den.density{i};
+        else
+            [~, idxT1] = min(abs(sol.deval.t-preference.viewer.density3d.zoom{i}(1,1)));
+            [~, idxT2] = min(abs(sol.deval.t-preference.viewer.density3d.zoom{i}(1,2)));
+            T = sol.deval.t(idxT1:idxT2);
+            
+            [~, idxX1] = min(abs(den.spacedX{i}-preference.viewer.density3d.zoom{i}(2,1)));
+            [~, idxX2] = min(abs(den.spacedX{i}-preference.viewer.density3d.zoom{i}(2,2)));
+                        
+            X = den.spacedX{i}(idxX1:idxX2);
+            
+            D = den.density{i}(idxX1:idxX2,idxT1:idxT2);
+        end
+        
         if preference.viewer.density3d.relativ{i}
             n = preference.numberOfSimulations;
         else
             n = 1;
         end
         figure
-        surface(sol.deval.t,den.spacedX{i},den.density{i}/n,'LineStyle','none')
-        xlim([sol.deval.t(1) sol.deval.t(end)]);
-        ylim([den.minX{i} den.maxX{i}]);
+        surface(T,X,D/n,'LineStyle','none')
+        xlim([T(1) T(end)]);
+        ylim([X(1) X(end)]);
         xlabel(preference.viewer.density3d.xlabel{i})
         ylabel(preference.viewer.density3d.ylabel{i})
         zlabel(preference.viewer.density3d.zlabel{i})
@@ -83,11 +100,29 @@ logger('info','showDensity',preference)
 for i = 1:preference.ode.numberOfEquations
     if preference.viewer.density.show{i}
         logger('info',['Plot equation number ',num2str(i)],preference)
+        
+        if isempty(preference.viewer.density.zoom{i})
+            T = sol.deval.t;
+            X = den.spacedX{i};
+            D = den.density{i};
+        else
+            [~, idxT1] = min(abs(sol.deval.t-preference.viewer.density.zoom{i}(1,1)));
+            [~, idxT2] = min(abs(sol.deval.t-preference.viewer.density.zoom{i}(1,2)));
+            T = sol.deval.t(idxT1:idxT2);
+            
+            [~, idxX1] = min(abs(den.spacedX{i}-preference.viewer.density.zoom{i}(2,1)));
+            [~, idxX2] = min(abs(den.spacedX{i}-preference.viewer.density.zoom{i}(2,2)));
+                        
+            X = den.spacedX{i}(idxX1:idxX2);
+            
+            D = den.density{i}(idxX1:idxX2,idxT1:idxT2);
+        end
+        
         figure
-        image(sol.deval.t, den.spacedX{i},64*den.density{i}/max(max(den.density{i})));
+        image(T,X,64*D/max(max(D)));
         set(gca,'ydir','normal');
-        xlim([sol.deval.t(1) sol.deval.t(end)]);
-        ylim([den.minX{i} den.maxX{i}]);
+        xlim([T(1) T(end)]);
+        ylim([X(1) X(end)]);
         xlabel(preference.viewer.density.xlabel{i})
         ylabel(preference.viewer.density.ylabel{i})
         title(preference.viewer.density.title{i})

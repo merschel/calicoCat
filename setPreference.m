@@ -287,14 +287,11 @@ if isfield(newPreference,'seperation') && isfield(newPreference.seperation,'para
         end
     end
 else
-    n = length(preference.seperation.para.interval);
-    for k = 1:n
-        h = cell(numberOfParameter,1);
-        for i = 1:numberOfParameter
-            h{i} = {preference.para.interval{i}{1} preference.para.interval{i}{2}};  %<-- default
-        end
-        preference.seperation.para.interval{k} = h;
+    h = cell(numberOfParameter,1);
+    for i = 1:numberOfParameter
+        h{i} = {preference.para.interval{i}{1} preference.para.interval{i}{2}};  %<-- default
     end
+    preference.seperation.para.interval{1} = h;
 end
 
 %% Viewer
@@ -431,6 +428,25 @@ else
     preference.viewer.density3d.relativ = h;
 end
 
+logger('info','Set viewer.density3d.zoom',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'density3d') && isfield(newPreference.viewer.density3d,'zoom')
+    if numberOfEquations > 1 && length(newPreference.viewer.density3d.zoom) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.density3d.zoom{1};
+        end
+        preference.viewer.density3d.zoom = h;
+    else
+        preference.viewer.density3d.zoom = newPreference.viewer.density3d.zoom;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i=1:numberOfEquations
+        h{i} = []; %<-- default
+    end
+    preference.viewer.density3d.zoom = h;
+end
+
 logger('info','Set viewer.density.show',preference)
 if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'density') && isfield(newPreference.viewer.density,'show')
     if numberOfEquations > 1 && length(newPreference.viewer.density.show) == 1
@@ -524,6 +540,25 @@ else
         h{i} = sprintf('Density for equation %d',i); %<-- default
     end
     preference.viewer.density.title = h;
+end
+
+logger('info','Set viewer.density.zoom',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'density') && isfield(newPreference.viewer.density,'zoom')
+    if numberOfEquations > 1 && length(newPreference.viewer.density.zoom) == 1
+        h = cell(numberOfEquations,1);
+        for i = 1:numberOfEquations
+            h{i} = newPreference.viewer.density.zoom{1};
+        end
+        preference.viewer.density.zoom = h;
+    else
+        preference.viewer.density.zoom = newPreference.viewer.density.zoom;
+    end
+else
+    h = cell(numberOfEquations,1);
+    for i=1:numberOfEquations
+        h{i} = []; %<-- default
+    end
+    preference.viewer.density.zoom = h;
 end
 
 logger('info','Set viewer.sepValue.show',preference)
