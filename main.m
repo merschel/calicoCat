@@ -59,17 +59,14 @@ preference.viewer.confidence.show = {0};
 
 
 
-output = monte(preference);
+output = calicoCat(preference);
 %profile off
 %profile viewer
 
 
 % TODO:
-
 % Version 0.5
-%  - Komentare und funktionsbeschreibung
 %  - anleitung schreiben
-%  - give the hole project a better name: how about LyX, CalicoCat
 
 % Version 0.6
 %  - 3d seperation

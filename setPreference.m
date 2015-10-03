@@ -57,7 +57,7 @@ end
 
 logger('info','+++++++++++++++++++++++++++++++++++++',preference)
 logger('info','Strart program and set the preference',preference)
-logger('info',['Version ',num2str(versionMonte)],preference)
+logger('info',['Version ',versionCC()],preference)
 %% ODE
 logger('info','Set ode.solver',preference)
 if isfield(newPreference,'ode') && isfield(newPreference.ode,'solver')
