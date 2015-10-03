@@ -7,6 +7,13 @@
 function monteViewer(sol,den,preference,mode,varargin)
 
 switch mode
+    case 'showSolPlot'
+        try
+            showSolPlot(sol,preference)
+        catch e
+            logger('error',['Something goes wrong in solPlot: ',...
+                e.identifier, ' -> ', e.message],preference)
+        end
     case 'showDensity3d'
         try
             showDensity3d(sol,den,preference)
@@ -210,3 +217,52 @@ for i = 1:preference.ode.numberOfEquations
     end
 end
 end
+
+function showSolPlot(sol,preference)
+logger('info','showSolPlot',preference)
+for i = 1:size(preference.viewer.solPlot.show,1)
+    if length(preference.viewer.solPlot.show{i}) == 2
+        if preference.viewer.solPlot.show{i}{1} == 0
+            X1 = sol.deval.t;
+            X2 = sol.deval.x{preference.viewer.solPlot.show{i}{2}};
+        elseif preference.viewer.solPlot.show{i}{2} == 0
+            X1 = sol.deval.x{preference.viewer.solPlot.show{i}{1}};
+            X2 = sol.deval.t;
+        else
+            X1 = sol.deval.x{preference.viewer.solPlot.show{i}{1}}';
+            X2 = sol.deval.x{preference.viewer.solPlot.show{i}{2}}';
+        end
+        figure
+        plot(X1,X2,'color',preference.viewer.solPlot.color{i});
+        xlabel(preference.viewer.solPlot.xlabel{i})
+        ylabel(preference.viewer.solPlot.ylabel{i})
+    else
+        if preference.viewer.solPlot.show{i}{1} == 0
+            X1 = sol.deval.t;
+            X2 = sol.deval.x{preference.viewer.solPlot.show{i}{2}};
+            X3 = sol.deval.x{preference.viewer.solPlot.show{i}{3}};
+        elseif preference.viewer.solPlot.show{i}{2} == 0
+            X1 = sol.deval.x{preference.viewer.solPlot.show{i}{1}};
+            X2 = sol.deval.t;
+            X3 = sol.deval.x{preference.viewer.solPlot.show{i}{3}};
+        elseif preference.viewer.solPlot.show{i}{3} == 0
+            X1 = sol.deval.x{preference.viewer.solPlot.show{i}{1}};
+            X2 = sol.deval.x{preference.viewer.solPlot.show{i}{2}};
+            X3 = sol.deval.t;
+        else
+            X1 = sol.deval.x{preference.viewer.solPlot.show{i}{1}}';
+            X2 = sol.deval.x{preference.viewer.solPlot.show{i}{2}}';
+            X3 = sol.deval.x{preference.viewer.solPlot.show{i}{3}}';
+        end
+        figure
+        plot3(X1,X2,X3,'color',preference.viewer.solPlot.color{i})
+        xlabel(preference.viewer.solPlot.xlabel{i})
+        ylabel(preference.viewer.solPlot.ylabel{i})
+        zlabel(preference.viewer.solPlot.zlabel{i})
+    end
+end
+
+end
+
+
+

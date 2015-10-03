@@ -26,6 +26,7 @@ monteViewer(sol,den,preference,'showDensity')
 monteViewer(sol,[],preference,'showSeperationValue')
 monteViewer(sol,[],preference,'showSeperationPara')
 monteViewer(sol,[],preference,'showConfidenceInterval')
+monteViewer(sol,[],preference,'showSolPlot')
 
 output.sol = sol;
 output.den = den;

@@ -561,6 +561,192 @@ else
     preference.viewer.density.zoom = h;
 end
 
+logger('info','Set viewer.solPlot.show',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'solPlot') && isfield(newPreference.viewer.solPlot,'show')
+    if numberOfEquations > 1 && length(newPreference.viewer.solPlot.show) == 1
+        n = numberOfEquations*(numberOfEquations+1)*(numberOfEquations+2)/6;
+        h = cell(n,1);
+        count1 = 0;
+        count2 = numberOfEquations;
+        count3 = (numberOfEquations^2+numberOfEquations)/2;
+        count4 = numberOfEquations^2;
+        for i = 1:numberOfEquations
+            count1 = count1 + 1;
+            h{count1} = {0,i};
+            for j = i+1:numberOfEquations
+                count2 = count2 + 1;
+                h{count2} = {i,j};
+                count3 = count3 + 1;
+                h{count3} = {0,i,j};
+                for k = j+1:numberOfEquations
+                    count4 = count4 + 1;
+                    h{count4} = {i,j,k};
+                end
+            end
+        end
+        preference.viewer.solPlot.show = h;
+    else
+        preference.viewer.solPlot.show = newPreference.viewer.solPlot.show;
+    end
+else
+    n = (numberOfEquations^2+numberOfEquations)/2;
+    h = cell(n,1);
+    count = numberOfEquations;
+    for i = 1:numberOfEquations
+        h{i} = {0, i};
+        for j = i+1:numberOfEquations
+            count = count + 1;
+            h{count} = {i,j};  %<-- default
+        end
+    end
+    preference.viewer.solPlot.show = h;   
+end
+
+logger('info','Set viewer.solPlot.color',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'solPlot') && isfield(newPreference.viewer.solPlot,'color')
+    if numberOfEquations > 1 && length(newPreference.viewer.solPlot.color) == 1
+        n = length(preference.viewer.solPlot.show);
+        h = cell(n,1);
+        for i = 1:n
+            h{i} = newPreference.viewer.solPlot.color;
+        end
+        preference.viewer.solPlot.color = h;
+    else
+        preference.viewer.solPlot.color = newPreference.viewer.solPlot.color;
+    end
+else
+    n = length(preference.viewer.solPlot.show);
+    h = cell(n,1);
+    for i = 1:n
+        h{i} = 'blue'; %<-- default
+    end
+    preference.viewer.solPlot.color = h;   
+end
+
+logger('info','Set viewer.solPlot.xlabel',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'solPlot') && isfield(newPreference.viewer.solPlot,'xlabel')
+    if numberOfEquations > 1 && length(newPreference.viewer.solPlot.xlabel) == 1
+        n = length(preference.viewer.solPlot.show);
+        h = cell(n,1);
+        for i = 1:n
+            h{i} = newPreference.viewer.solPlot.xlabel;
+        end
+        preference.viewer.solPlot.xlabel = h;
+    else
+        preference.viewer.solPlot.xlabel = newPreference.viewer.solPlot.xlabel;
+    end
+else
+    n = length(preference.viewer.solPlot.show);
+    h = cell(n,1);
+    for i = 1:n
+        switch preference.viewer.solPlot.show{i}{1}
+            case 0
+                h{i} = 't'; %<-- default
+            case 1
+                h{i} = 'x_1'; %<-- default
+            case 2
+                h{i} = 'x_2'; %<-- default
+            case 3
+                h{i} = 'x_3'; %<-- default
+        end
+    end
+    preference.viewer.solPlot.xlabel = h;
+end
+
+logger('info','Set viewer.solPlot.ylabel',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'solPlot') && isfield(newPreference.viewer.solPlot,'ylabel')
+    if numberOfEquations > 1 && length(newPreference.viewer.solPlot.ylabel) == 1
+        n = length(preference.viewer.solPlot.show);
+        h = cell(n,1);
+        for i = 1:n
+            h{i} = newPreference.viewer.solPlot.ylabel;
+        end
+        preference.viewer.solPlot.ylabel = h;
+    else
+        preference.viewer.solPlot.ylabel = newPreference.viewer.solPlot.ylabel;
+    end
+else
+    n = length(preference.viewer.solPlot.show);
+    h = cell(n,1);
+    for i = 1:n
+        switch preference.viewer.solPlot.show{i}{2}
+            case 0
+                h{i} = 't'; %<-- default
+            case 1
+                h{i} = 'x_1'; %<-- default
+            case 2
+                h{i} = 'x_2'; %<-- default
+            case 3
+                h{i} = 'x_3'; %<-- default
+        end
+    end
+    preference.viewer.solPlot.ylabel = h;
+end
+
+logger('info','Set viewer.solPlot.zlabel',preference)
+if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'solPlot') && isfield(newPreference.viewer.solPlot,'zlabel')
+    if numberOfEquations > 1 && length(newPreference.viewer.solPlot.zlabel) == 1
+        n = length(preference.viewer.solPlot.show);
+        h = cell(n,1);
+        for i = 1:n
+            h{i} = newPreference.viewer.solPlot.zlabel;
+        end
+        preference.viewer.solPlot.zlabel = h;
+    else
+        preference.viewer.solPlot.zlabel = newPreference.viewer.solPlot.zlabel;
+    end
+else
+    n = length(preference.viewer.solPlot.show);
+    h = cell(n,1);
+    for i = 1:n
+        if length(preference.viewer.solPlot.show{i}) == 3
+            switch preference.viewer.solPlot.show{i}{3}
+                case 0
+                    h{i} = 't'; %<-- default
+                case 1
+                    h{i} = 'x_1'; %<-- default
+                case 2
+                    h{i} = 'x_2'; %<-- default
+                case 3
+                    h{i} = 'x_3'; %<-- default
+            end
+        end
+    end
+    preference.viewer.solPlot.zlabel = h;
+end
+
+% logger('info','Set viewer.solPlot.title',preference)
+% if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'solPlot') && isfield(newPreference.viewer.solPlot,'title')
+%     if numberOfEquations > 1 && length(newPreference.viewer.solPlot.title) == 1
+%         n = length(preference.viewer.solPlot.show);
+%         h = cell(n,1);
+%         for i = 1:n
+%             h{i} = newPreference.viewer.solPlot.title;
+%         end
+%         preference.viewer.solPlot.zlabel = h;
+%     else
+%         preference.viewer.solPlot.title = newPreference.viewer.solPlot.title;
+%     end
+% else
+%     n = length(preference.viewer.solPlot.show);
+%     h = cell(n,1);
+%     for i = 1:n
+%         for j = 1:length(preference.viewer.solPlot.show{i})
+%             switch preference.viewer.solPlot.show{i}{j}
+%                 case 0
+%                     h{i} = 't'; %<-- default
+%                 case 1
+%                     h{i} = 'x_1'; %<-- default
+%                 case 2
+%                     h{i} = 'x_2'; %<-- default
+%                 case 3
+%                     h{i} = 'x_3'; %<-- default
+%             end
+%         end
+%     end
+%     preference.viewer.solPlot.title = h;
+% end
+
 logger('info','Set viewer.sepValue.show',preference)
 if isfield(newPreference,'viewer') && isfield(newPreference.viewer,'sepValue') && isfield(newPreference.viewer.sepValue,'show')
     n = length(newPreference.viewer.sepValue.show);

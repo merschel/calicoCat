@@ -4,7 +4,7 @@ clear;
 preference.ode.solver = @ode45;
 preference.ode.f = @f;
 
-preference.numberOfSimulations = 100; %wenn 1 ist die density nicht richtig
+preference.numberOfSimulations = 3; %wenn 1 ist die density nicht richtig
 preference.simulationTime = [0 30];
 preference.deltaT = .01;
 preference.deltaX = .01;
@@ -30,27 +30,34 @@ preference.seperation.value.time{1} = {0};   % erste Separartion von gleichung 1
 %preference.seperation.para.interval{1} = {{0 0.5; 0.5 1}};     % Zweite Seperation für alle 3 Parameter gleich 
 %preference.seperation.para.interval{2} = {{0 0.3; 0.3 0.5; 0.5 1}};  % dritte Seperation für alle Parameter gleich 
 
-preference.viewer.density.show = {1};
+%preference.viewer.solPlot.show = {{0 1}; {0 2}; {1 2}};
+preference.viewer.solPlot.show = {1};
+%preference.viewer.solPlot.color = {@lines};
+
+preference.viewer.density.show = {0};
 % preference.viewer.density.zoom{1} = [];
 % preference.viewer.density.zoom{2} = [2 3 ; 3 4];
 
-preference.viewer.density3d.show = {1};
+preference.viewer.density3d.show = {0};
 
 %preference.viewer.density3d.zoom{1} = [10 20;1 2];
 %preference.viewer.density3d.zoom{2} = [];
 
-preference.viewer.sepValue.show{1} = {1};
+preference.viewer.sepValue.show{1} = {0};
 %preference.viewer.sepValue.show{2} = {0;0};
 %preference.viewer.sepValue.show{3} = {0};
 
-preference.viewer.sepPara.show{1} = {1};
+preference.viewer.sepPara.show{1} = {0};
 %preference.viewer.sepPara.show{1} = {1 1 1;1 0 1};
 %preference.viewer.sepPara.show{2} = {1};
 %preference.viewer.sepPara.show{3} = {0};
 
 %preference.viewer.confidence.intervals = {[0.1 0.2 0.4 0.3 0.5 0.9 0.7 0.8 1]};
+preference.viewer.confidence.show = {0};
 
 %preference.logger.stream.info = 'output.info';
+
+
 
 output = monte(preference);
 %profile off
@@ -60,8 +67,6 @@ output = monte(preference);
 % TODO:
 
 % Version 0.5
-%  - Varablen umbenennen
-%  - ploten von zustandsgr��en gegeneinander
 %  - Komentare und funktionsbeschreibung
 %  - anleitung schreiben
 %  - give the hole project a better name: how about LyX, CalicoCat
@@ -85,7 +90,11 @@ output = monte(preference);
 % - eigenwerte konfidenzintervalle
 % - eigenwerte dichte
 % - logger bei einfachen zahlen mit 0 auffühlen 
+% - lhs zus�tzlich als zufallsgenaerator
 
+% - Version 0.8 
+% - Hauptkomponentenanalyse
+% - 
 
 % Version 1.0
 %  - cluster den Zeitverlauf um unterschiedliche parameter konstelation als
