@@ -4,18 +4,18 @@ clear;
 preference.ode.solver = @ode45;
 preference.ode.f = @f;
 
-preference.numberOfSimulations = 3; %wenn 1 ist die density nicht richtig
+preference.numberOfSimulations = 1; %wenn 1 ist die density nicht richtig
 preference.simulationTime = [0 30];
 preference.deltaT = .01;
 preference.deltaX = .01;
 
 preference.parallel = 1; 
 
-preference.inic.interval = {{0 2}};             % {{* *}} or {{* *};{* *};...}
+preference.inic.interval = {{-10 10}};             % {{* *}} or {{* *};{* *};...}
 %preference.inic.interval = {{1 2 3};{4 3 2}};
-preference.inic.distribution = {'integer'}; % 'normally', 'uniformly', 'integer' or 'list'
+preference.inic.distribution = {'uniformly'}; % 'normally', 'uniformly', 'integer' or 'list'
 
-preference.para.interval = {{1 2}};              % {{* *}} or {{* *};{* *};...}
+preference.para.interval = {{-10 10}};              % {{* *}} or {{* *};{* *};...}
 preference.para.distribution = {'uniformly'}; % 'normally', 'uniformly' or 'integer' or 'list'
 
 preference.seperation.value.time{1} = {0};   % erste Separartion von gleichung 1 zum zeitpunkt 0 und gelichung 2 zum zeitpunkt 0
@@ -58,6 +58,8 @@ preference.viewer.confidence.show = {0};
 %preference.logger.stream.info = 'output.info';
 
 
+preference.viewer.eigenValue.show = {1};
+
 
 output = calicoCat(preference);
 %profile off
@@ -69,6 +71,7 @@ output = calicoCat(preference);
 %  - anleitung schreiben
 
 % Version 0.6
+%  - separation rechtschreibfehler entfernen 
 %  - 3d seperation
 %  - test ob inic seperation die intervalle keinen luecken haben, ggf auch
 %  fuer die anderen seperation ueberpruefen

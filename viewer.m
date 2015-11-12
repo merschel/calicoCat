@@ -4,7 +4,7 @@
 % Present the datas.
 %   * ODE solution:
 
-function viewer(sol,den,preference,mode,varargin)
+function viewer(sol,den,eva,preference,mode,varargin)
 
 switch mode
     case 'showSolPlot'
@@ -47,6 +47,13 @@ switch mode
             showConfidenceInterval(sol,preference)
         catch e
             logger('error',['Something goes wrong in showConfidenceInterval: ',...
+                e.identifier, ' -> ', e.message],preference)
+        end
+    case 'showEigenValue'
+        try
+            showEigenValue(sol,eva,preference)
+        catch e
+            logger('error',['Something goes wrong in showEigenValue: ',...
                 e.identifier, ' -> ', e.message],preference)
         end
     otherwise
@@ -264,6 +271,62 @@ for i = 1:size(preference.viewer.solPlot.show,1)
         ylabel(preference.viewer.solPlot.ylabel{i})
         zlabel(preference.viewer.solPlot.zlabel{i})
     end
+end
+end
+
+function showEigenValue(sol,eva,preference)
+
+A = zeros(size(eva.eig,2),preference.numberOfSimulations);
+
+for i = 1:preference.ode.numberOfEquations
+    A(:,:) = eva.eig(i,:,:);
+    rA = real(A);
+    iA = imag(A);
+    
+    mini = min(min(iA));
+    maxi = max(max(iA));
+    
+    minr = min(min(rA));
+    maxr = max(max(rA));
+    
+    figure
+    subplot(3,1,1)
+    hold on
+    line([sol.deval.t(1) sol.deval.t(end)],[0 0],'color','black')
+    
+    plot(sol.deval.t,rA,'color','blue')    
+    xlim([sol.deval.t(1) sol.deval.t(end)])
+    ylim([minr maxr])
+    xlabel('t')
+    ylabel('Re')
+    title(['Equation ',num2str(i)])
+    
+    subplot(3,1,2)
+    hold on
+    line([sol.deval.t(1) sol.deval.t(end)],[0 0],'color','black')
+    
+    plot(sol.deval.t,iA,'color','blue')
+    xlim([sol.deval.t(1) sol.deval.t(end)])
+    ylim([mini maxi])
+    xlabel('t')
+    ylabel('Im')
+    
+    subplot(3,1,3)
+    plot(rA,iA,'bo')
+    xlim([minr maxr])
+    ylim([mini maxi])
+    xlabel('Re')
+    ylabel('Im')
+    
+    figure
+    hold on
+    plot3(sol.deval.t,rA,iA,'color','blue')
+    plot3(sol.deval.t,0.*rA+maxr,iA,'color',[0.8,0.8,0.8])
+    plot3(sol.deval.t,rA,0.*iA+mini,'color',[0.8,0.8,0.8])
+    xlabel('t')
+    ylabel('Re')
+    zlabel('Im')
+    view([-45 45])
 end
 
 end

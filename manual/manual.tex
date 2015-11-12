@@ -1,0 +1,153 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[]{mcode}
+\begin{document}
+	
+\section{Introduction}
+	
+\section{Setings}	
+
+\subsection{logger}
+
+The logger controls the information output. The default output stream for 'info' and 'error' massage is the console. One can set an other stream for each mode with
+\begin{lstlisting}
+stream.info = '*';
+stream.error = '*';
+\end{lstlisting} 
+
+\subsection{Basic Settings}
+\subsubsection*{numberOfSimulations}
+This parameter controls the number of runs / simulations.
+\begin{lstlisting}
+	numberOfSimulations = *;  % default value = 100
+\end{lstlisting}
+It has to be a natural number.
+
+\subsubsection*{simulationTime}
+This parameter set the time range of each simulations. 
+\begin{lstlisting}
+	simulationTime = [* *]; % default value = [0 1]; 
+\end{lstlisting}
+The range have to be positive.
+\subsubsection*{deltaT}
+This parameter set the time step size for the evaluation of the simultions and also the time step size for the density. 
+
+\begin{lstlisting}
+	deltaT = *; % default value = 0.1;
+\end{lstlisting}
+
+\subsubsection*{deltaX}
+This parameter set the step size for the density.
+
+\begin{lstlisting}
+	deltaX = *; % default value = 0.1;
+\end{lstlisting}
+
+\subsubsection*{parallel}
+This parameter controls whether one use parallel computing toolbox.
+
+\begin{lstlisting}
+	parallel = *; % default value = 0;
+\end{lstlisting}
+
+The value have to be a logical. 
+
+\subsection*{compute}
+\subsubsection*{solutions}
+Here one can determine whether or not one want to calculate the solutions of the system. If one not compute the solution, one hve to set 
+\begin{lstlisting}
+   compute.solution = 0;
+\end{lstlisting}
+
+To determine the solution is the default value.
+
+\subsubsection*{density}
+Here one can determine whether or not one want to calculate the density of the solutions. If one not interested to calculate the density one can save memory and time if one set 
+\begin{lstlisting}
+	compute.density = 0;
+\end{lstlisting} 
+
+To compute the density is the default value.
+
+\subsection{ODE}
+\subsubsection*{solver}
+Here one can determine which solver matlab have tt use to solve the system. The default solver is the 'ode15s'. One have to commit the function handle of the solver. If one have a own solver one can also commit the handle here. 
+
+\begin{lstlisting}
+	ode.solver = *;
+\end{lstlisting} 
+ 
+\subsubsection*{options}
+Here one can commit options to the solver. See the documentation of the matlab ode solver. In the default mode non options will be commit.
+
+\subsubsection*{f}
+Here one have to commit the handle to the m-file which describe ode system (the right side of the ode). The default handle is 'f'. In the m-file have to be the following two comments.  
+
+\begin{lstlisting}
+	% numberOfEquations = *
+	% numberOfParameter = *
+\end{lstlisting}
+
+For the stars (*) one have to set the number of equations and the number of parameter which describes the system.  
+
+\subsection{Intervals and type for the random number generator}
+\subsubsection*{inic}
+Here one can set the intervals for the random number generator for each equation of the system. 
+
+If one have n equations and want to set n different intervals for each equation
+\begin{lstlisting}
+	inic.interval = {{* *}; {* *};. . .;{* *}};
+\end{lstlisting} 
+with 
+\begin{lstlisting}
+	inic.interval = {{* *}}; % Default value = {{0 1}}
+\end{lstlisting}
+one can set for each equation the same interval.\\ 
+
+With 
+\begin{lstlisting}
+	inic.distribution = {*;*;. . .;*};
+\end{lstlisting}
+one can set the type of distribution for the random initial conditions. Possible are 'normally', 'uniformly', 'integer' or 'list'. With 'list' one can set own initial condition for each simulation. If one want to set all equations with the same distribution one can just set 
+\begin{lstlisting}
+	inic.distribution = {*}; % Default value = {'uniformly'}
+\end{lstlisting}
+
+\subsubsection*{para}
+With para one can set properties for the random numbers for each parameter of the system. 
+
+The same rules apply for the parameter as for initial conditions. See \textbf{inic}.
+
+\subsection{seperation}
+\subsubsection*{value}
+
+Here on can set a separation by value of the solutions. One have to set a time point where one want to separate with
+\begin{lstlisting}
+	seperation.value.time{1} = {*};
+\end{lstlisting}
+
+One can set more the ones separations at once. Therefore one can add more seperations just by
+
+\begin{lstlisting}
+	seperation.value.time{2} = {*};
+\end{lstlisting}
+
+and so on. Furthermore one have to set intervals for each seperations and each equations
+
+\begin{lstlisting}
+	seperation.value.interval{1} = {{* *; * *; . . .; * *};
+	                                {* *; * *; . . .; * *}; . . .};
+\end{lstlisting}
+
+The braces in the outer brace are for the equations. The values in the inner braces are the intervals. Each interval are an independent separation.  
+
+\subsubsection*{para}
+
+
+
+\end{document}

@@ -19,17 +19,23 @@ end
 
 if preference.compute.density        % TODO: Wenn nicht berechnet werden soll muss etwas �bergeben werden
     den = density(sol,preference);
+else
+    den = [];
 end
 
-viewer(sol,den,preference,'showDensity3d')
-viewer(sol,den,preference,'showDensity')
-viewer(sol,[],preference,'showSeperationValue')
-viewer(sol,[],preference,'showSeperationPara')
-viewer(sol,[],preference,'showConfidenceInterval')
-viewer(sol,[],preference,'showSolPlot')
+eva = eigenvalue(sol,preference);
+
+viewer(sol,den,[],preference,'showDensity3d')
+viewer(sol,den,[],preference,'showDensity')
+viewer(sol,[],[],preference,'showSeperationValue')
+viewer(sol,[],[],preference,'showSeperationPara')
+viewer(sol,[],[],preference,'showConfidenceInterval')
+viewer(sol,[],[],preference,'showSolPlot')
+viewer(sol,[],eva,preference,'showEigenValue')
 
 output.sol = sol;
 output.den = den;
+output.eva = eva;
 output.preference = preference;
 
 %% close all open files
@@ -107,6 +113,7 @@ end
 
 x = cell2mat(x);
 
+solDeval.x = cell(preference.ode.numberOfEquations,1);
 for j = 1:preference.ode.numberOfEquations
     solDeval.x{j} = x(j:preference.ode.numberOfEquations:end,:);
 end
@@ -157,4 +164,26 @@ den.spacedX = spacedX;
 den.density = density;
 
 logger('info','Done to compute the density',preference)
+end
+
+function eva = eigenvalue(sol,preference)
+logger('info','Begin to compute the eigenvalues',preference)
+nt = length(sol.deval.t);
+eva.J = zeros(preference.ode.numberOfEquations,preference.ode.numberOfEquations,nt,preference.numberOfSimulations);
+eva.eig = zeros(preference.ode.numberOfEquations,nt,preference.numberOfSimulations);
+x = zeros(preference.ode.numberOfEquations,nt);
+
+for i = 1:preference.numberOfSimulations
+    k = sol.rPara(:,i);
+    for l = 1:preference.ode.numberOfEquations
+        x(l,:) = sol.deval.x{l}(i,:);  
+    end
+
+    for j = 1:nt
+        [~,J] = preference.ode.f(sol.deval.t(j),x(:,j),k);
+        eva.J(:,:,j,i) = J;
+        eva.eig(:,j,i) = eig(J);
+    end
+end
+logger('info','Done to compute the eigenvalues',preference)
 end

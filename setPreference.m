@@ -18,7 +18,7 @@ if isfield(newPreference,'logger') && isfield(newPreference.logger,'stream') && 
         if preference.logger.stream.info == -1
             preference.logger.stream.info = 1;  % if it goes wrong to open or create the file
         end
-    catch
+    catch e
         preference.logger.stream.info = 1; % if it goes wrong in the try catch
     end
 else
@@ -31,7 +31,7 @@ if isfield(newPreference,'logger') && isfield(newPreference.logger,'stream') && 
         if preference.logger.stream.error == -1
             preference.logger.stream.error = 1; % if it goes wrong to open or create the file
         end
-    catch
+    catch e
         preference.logger.stream.error = 1; % if it goes wrong in the try catch
     end
 else
@@ -68,7 +68,7 @@ end
 
 logger('info','Set ode.options',preference)
 if isfield(newPreference,'ode') && isfield(newPreference.ode,'options')
-    preference.ode.options = newPrefernce.ode.options;
+    preference.ode.options = newPreference.ode.options;
 else
     preference.ode.options = []; %<-- default
 end
