@@ -34,10 +34,10 @@ preference.seperation.value.time{1} = {0};   % erste Separartion von gleichung 1
 preference.viewer.solPlot.show = {1};
 %preference.viewer.solPlot.color = {@lines};
 
-preference.viewer.density.show = {0};
+preference.viewer.density.show = {1};
 % preference.viewer.density.zoom{1} = [];
 % preference.viewer.density.zoom{2} = [2 3 ; 3 4];
-
+preference.viewer.density.color = {'viridis'};
 preference.viewer.density3d.show = {0};
 
 %preference.viewer.density3d.zoom{1} = [10 20;1 2];
